@@ -43,9 +43,9 @@ let patients: Patient[] = [
 ];
 
 let payments: Payment[] = [
-  { id: '1', patient: 'Sarah Jenkins', service: 'General Checkup', date: '2023-10-24', amount: '$150.00', status: 'Paid' },
-  { id: '2', patient: 'Michael Chen', service: 'Follow-up', date: '2023-10-23', amount: '$85.00', status: 'Paid' },
-  { id: '3', patient: 'Emma Wilson', service: 'Consultation', date: '2023-10-23', amount: '$200.00', status: 'Pending' },
+  { id: '1', patient: 'Sarah Jenkins', service: 'General Checkup', date: '2023-10-24', amount: 'R2,775.00', status: 'Paid' },
+  { id: '2', patient: 'Michael Chen', service: 'Follow-up', date: '2023-10-23', amount: 'R1,572.50', status: 'Paid' },
+  { id: '3', patient: 'Emma Wilson', service: 'Consultation', date: '2023-10-23', amount: 'R3,700.00', status: 'Pending' },
 ];
 
 // Helper to simulate DB delay

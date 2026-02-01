@@ -267,7 +267,7 @@ export default function Home() {
               </div>
               <div className="glass-card" style={{ padding: '24px', background: 'linear-gradient(to bottom right, #ffffff, #f0f9ff)', border: '1px solid #bae6fd', boxShadow: '0 4px 6px -1px rgba(37,99,235,0.05)' }}>
                 <div style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '8px', fontWeight: 600 }}>Est. Revenue Risk</div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>$1,240</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>R22,940</div>
                 <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Based on no-show prob.</div>
               </div>
             </div>
@@ -434,7 +434,7 @@ export default function Home() {
                 </div>
                 <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
                    <div style={{ color: '#64748b', fontSize: '0.8rem' }}>Revenue Saved</div>
-                   <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>$4,250</div>
+                   <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>R78,625</div>
                    <div style={{ color: '#10b981', fontSize: '0.8rem' }}>From predictive overbooking</div>
                 </div>
                 <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
@@ -464,7 +464,7 @@ export default function Home() {
                       <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2563eb" strokeWidth="3" strokeDasharray="75, 100" />
                     </svg>
                     <div style={{ position: 'absolute', textAlign: 'center' }}>
-                      <div style={{ fontSize: '1.2rem', fontWeight: 800 }}>$12.4k</div>
+                      <div style={{ fontSize: '1.2rem', fontWeight: 800 }}>R229k</div>
                       <div style={{ fontSize: '0.6rem', color: '#64748b' }}>Projected</div>
                     </div>
                   </div>
