@@ -81,9 +81,15 @@ export default function Home() {
     setCurrentDate(newDate);
   };
 
+  const [user, setUser] = useState<{name: string, role: string} | null>(null);
+
   useEffect(() => {
     setMounted(true);
     fetchData();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
   const fetchData = async () => {
@@ -223,7 +229,21 @@ export default function Home() {
         </div>
         
         <div style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid #e2e8f0' }}>
-          <button className="btn" style={{ justifyContent: 'flex-start', color: '#64748b', fontWeight: 600 }} onClick={() => router.push('/login')}>
+          {user && (
+            <div style={{ padding: '0 12px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '32px', height: '32px', background: '#e2e8f0', borderRadius: '50%', display: 'grid', placeItems: 'center' }}>
+                <UserIcon />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>{user.name}</div>
+                <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase' }}>{user.role}</div>
+              </div>
+            </div>
+          )}
+          <button className="btn" style={{ justifyContent: 'flex-start', color: '#64748b', fontWeight: 600 }} onClick={() => {
+            localStorage.removeItem('user');
+            router.push('/login');
+          }}>
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sign Out
           </button>
         </div>
@@ -234,7 +254,7 @@ export default function Home() {
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
-              {activeTab === 'daily' && 'Clinic Dashboard'}
+              {activeTab === 'daily' && (user ? `Welcome, ${user.name.split(' ')[1]}` : 'Clinic Dashboard')}
               {activeTab === 'patients' && 'Patient Directory'}
               {activeTab === 'schedule' && 'Appointment Schedule'}
               {activeTab === 'payments' && 'Payments Overview'}

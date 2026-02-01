@@ -8,14 +8,23 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+
     // Simulate login delay
     setTimeout(() => {
-      setLoading(false);
-      router.push('/dashboard');
+      if ((email === 'admin@noshowiq.com' || email === 'doctor@clinic.com') && (password === 'demo123' || password === 'demo')) {
+        localStorage.setItem('user', JSON.stringify({ name: 'Dr. Sarah Connor', role: 'admin' }));
+        setLoading(false);
+        router.push('/dashboard');
+      } else {
+        setError('Invalid email or password');
+        setLoading(false);
+      }
     }, 1500);
   };
 
@@ -61,6 +70,22 @@ export default function Login() {
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>Welcome Back</h1>
           <p style={{ color: '#64748b' }}>Sign in to access your clinic dashboard</p>
         </div>
+
+        {error && (
+          <div style={{ 
+            marginBottom: '1rem', 
+            padding: '12px', 
+            borderRadius: '12px', 
+            background: '#fee2e2', 
+            color: '#dc2626', 
+            fontSize: '0.9rem', 
+            fontWeight: 600,
+            textAlign: 'center',
+            border: '1px solid #fecaca'
+          }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '1.5rem' }}>
