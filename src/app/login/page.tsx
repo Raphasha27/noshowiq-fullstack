@@ -162,6 +162,37 @@ export default function Login() {
         <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
           Don't have an account? <a href="#" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Contact Admin</a>
         </div>
+
+        {/* Demo Credentials Hint */}
+        <div style={{ marginTop: '24px', padding: '16px', background: '#eff6ff', borderRadius: '12px', border: '1px dashed #bfdbfe' }}>
+           <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e40af', marginBottom: '8px', textTransform: 'uppercase' }}>Demo Credentials</div>
+           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '4px' }}>
+              <span>Email:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>admin@noshowiq.com</span>
+           </div>
+           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '12px' }}>
+              <span>Pass:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>demo123</span>
+           </div>
+           <button 
+             type="button"
+             onClick={() => {
+               setEmail('admin@noshowiq.com');
+               setPassword('demo123');
+             }}
+             style={{
+               width: '100%',
+               padding: '8px',
+               background: 'white',
+               border: '1px solid #bfdbfe',
+               borderRadius: '8px',
+               color: '#2563eb',
+               fontSize: '0.8rem',
+               fontWeight: 600,
+               cursor: 'pointer'
+             }}
+           >
+             ⚡ Auto-Fill Demo User
+           </button>
+        </div>
       </div>
 
       <style jsx>{`
