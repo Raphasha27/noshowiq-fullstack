@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # .NET Backend API
+  api:
+    build:
+      context: .
+      dockerfile: NoShowIQ.API/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - ml_engine
+
+  # Python ML Engine
+  ml_engine:
+    build:
+      context: ./ml_engine
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      - api
