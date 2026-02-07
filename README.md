@@ -64,8 +64,17 @@ git clone https://github.com/Raphasha27/healthbridge-ai.git
 cd healthbridge-ai
 npm install
 
-# Run development server
+# Run development server (Frontend)
 npm run dev
+# Opens at http://localhost:3000
+
+### Running the Backend (.NET 8)
+To use the full features (simulations, detailed API):
+```bash
+# Open a new terminal
+cd NoShowIQ.API
+dotnet run
+# API runs at http://localhost:5000
 ```
 
 ## 🤝 Contributing
