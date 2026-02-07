@@ -115,6 +115,77 @@ export default function InteractiveMap() {
                 [-23.1550, 30.0550]  // Elim (Stop 4)
             ] as [number, number][],
             stopNames: ["Vuwani Clinic", "Malamulele Clinic", "Giyani Health Centre", "Elim Hospital"]
+        {
+            id: 4,
+            name: "Soweto Community Health Centre",
+            location: "Gauteng",
+            coordinates: [-26.2356, 27.8542], // Soweto
+            riskLevel: "high",
+            patientVolume: 145,
+            stockLevel: "low"
+        },
+        {
+            id: 5,
+            name: "Khayelitsha District Hospital",
+            location: "Western Cape",
+            coordinates: [-34.0376, 18.6720], // Khayelitsha
+            riskLevel: "medium",
+            patientVolume: 98,
+            stockLevel: "medium"
+        },
+        {
+            id: 6,
+            name: "Umlazi V Section Clinic",
+            location: "KwaZulu-Natal",
+            coordinates: [-29.9678, 30.8845], // Umlazi
+            riskLevel: "high",
+            patientVolume: 132,
+            stockLevel: "critical"
+        },
+        {
+            id: 7,
+            name: "Mthatha General Hospital",
+            location: "Eastern Cape",
+            coordinates: [-31.5889, 28.7885], // Mthatha
+            riskLevel: "medium",
+            patientVolume: 85,
+            stockLevel: "medium"
+        },
+        {
+            id: 8,
+            name: "Kimberley Hospital Complex",
+            location: "Northern Cape",
+            coordinates: [-28.7323, 24.7554], // Kimberley
+            riskLevel: "low",
+            patientVolume: 45,
+            stockLevel: "good"
+        },
+        {
+            id: 9,
+            name: "Pelonomi Tertiary Hospital",
+            location: "Free State",
+            coordinates: [-29.1362, 26.2483], // Bloemfontein
+            riskLevel: "high",
+            patientVolume: 110,
+            stockLevel: "low"
+        },
+        {
+            id: 10,
+            name: "Mahikeng Provincial Hospital",
+            location: "North West",
+            coordinates: [-25.8406, 25.6403], // Mahikeng
+            riskLevel: "medium",
+            patientVolume: 76,
+            stockLevel: "good"
+        },
+        {
+            id: 11,
+            name: "Rob Ferreira Hospital",
+            location: "Mpumalanga",
+            coordinates: [-25.4753, 30.9694], // Nelspruit
+            riskLevel: "low",
+            patientVolume: 62,
+            stockLevel: "good"
         }
     ];
 

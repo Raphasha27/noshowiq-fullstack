@@ -61,7 +61,7 @@ export default function LandingPage() {
             </Link>
             <a
               href="#features"
-              className="px-8 py-4 bg-white border-2 border-gray-200 text-black rounded-2xl font-bold text-lg hover:border-blue-600 hover:text-blue-600 transition-all"
+              className="px-8 py-4 bg-transparent border-2 border-gray-900 text-gray-900 rounded-2xl font-bold text-lg hover:bg-gray-900 hover:text-white transition-all"
             >
               Learn More
             </a>

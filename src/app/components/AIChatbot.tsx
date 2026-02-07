@@ -52,8 +52,14 @@ export default function AIChatbot() {
                 responseText = "Critical Alert: Paracetamol stock is low at 3 clinics in Limpopo. A restock order has been automatically drafted.";
             } else if (lowerInput.includes("mobile") || lowerInput.includes("route")) {
                 responseText = "The Makhado Mobile Unit is currently en route to Malamulele. ETA is 45 minutes. The route has been optimized to save 12km today.";
+            } else if (lowerInput.includes("gauteng") || lowerInput.includes("soweto")) {
+                responseText = "Soweto Community Health Centre is currently experiencing high patient volume. 3 additional locum nurses have been recommended.";
+            } else if (lowerInput.includes("western cape") || lowerInput.includes("cape town")) {
+                responseText = "Khayelitsha District Hospital has adequate stock levels, but TB medication is trending low. A resupply is scheduled for Tuesday.";
+            } else if (lowerInput.includes("kzn") || lowerInput.includes("natal")) {
+                responseText = "Umlazi V Section Clinic has a critical shortage of Insulin. An emergency transfer from King Edward VIII Hospital has been initiated.";
             } else {
-                responseText = "I can help you optimize resource allocation. Try asking about 'Vuwani Clinic', 'Medicine Stock', or 'Mobile Routes'.";
+                responseText = "I can help you optimize resource allocation across all 9 provinces. Try asking about specific clinics in Gauteng, KZN, or Limpopo.";
             }
 
             const aiMsg: Message = {
