@@ -213,7 +213,7 @@ export default function InteractiveMap() {
 
                 // Render Mobile Clinic Routes
                 routesData.forEach(route => {
-                    L.polyline(route.coordinates, {
+                    L.polyline(route.coordinates as L.LatLngExpression[], {
                         color: route.color,
                         weight: 3,
                         opacity: 0.7,
@@ -224,7 +224,7 @@ export default function InteractiveMap() {
                     // Add small dots for stops
                     route.coordinates.forEach((coord, index) => {
                         if (index > 0 && index < route.coordinates.length - 1) { // Skip start/end (since it's the clinic)
-                            L.circleMarker(coord, {
+                            L.circleMarker(coord as L.LatLngExpression, {
                                 radius: 4,
                                 fillColor: 'white',
                                 color: route.color,
