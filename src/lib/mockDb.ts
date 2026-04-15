@@ -42,7 +42,7 @@ let patients: Patient[] = [
   { id: '2', name: 'Michael Chen', email: 'm.chen@example.com', phone: '555-0102', lastVisit: '2023-10-23' },
 ];
 
-let payments: Payment[] = [
+const payments: Payment[] = [
   { id: '1', patient: 'Sarah Jenkins', service: 'General Checkup', date: '2023-10-24', amount: 'R2,775.00', status: 'Paid' },
   { id: '2', patient: 'Michael Chen', service: 'Follow-up', date: '2023-10-23', amount: 'R1,572.50', status: 'Paid' },
   { id: '3', patient: 'Emma Wilson', service: 'Consultation', date: '2023-10-23', amount: 'R3,700.00', status: 'Pending' },
@@ -112,7 +112,7 @@ export const mockDb = {
         return {
           ...app,
           risk: finalRisk,
-          riskLevel: finalLevel as any,
+          riskLevel: finalLevel as 'high' | 'medium' | 'low',
           reasoning: reasons
         };
       });

@@ -242,7 +242,7 @@ export default function Dashboard() {
             {/* Clinic Overview Table */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-900">Today's Clinic Overview</h2>
+                <h2 className="text-xl font-bold text-gray-900">Today&apos;s Clinic Overview</h2>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-600">February 6, 2026</span>

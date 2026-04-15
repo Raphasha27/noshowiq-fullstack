@@ -155,7 +155,7 @@ export default function LandingPage() {
       <section id="impact" className="bg-gradient-to-br from-blue-600 to-green-600 py-20 text-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Tackling South Africa's Healthcare Challenges
+            Tackling South Africa&apos;s Healthcare Challenges
           </h2>
           <p className="text-xl mb-12 opacity-90 max-w-3xl mx-auto">
             HealthBridge AI addresses the unique challenges faced by rural clinics across Limpopo,

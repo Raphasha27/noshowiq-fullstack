@@ -6,6 +6,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "09:00"
+    labels: []
     groups:
       dependencies:
         patterns:

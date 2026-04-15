@@ -160,7 +160,7 @@ export default function Login() {
         </form>
 
         <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
-          Don't have an account? <a href="#" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Contact Admin</a>
+          Don&apos;t have an account? <a href="#" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Contact Admin</a>
         </div>
 
         {/* Demo Credentials Hint */}
