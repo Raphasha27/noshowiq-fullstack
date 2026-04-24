@@ -1,5 +1,7 @@
 {
-    "framework": "nextjs",
-    "buildCommand": "npm run build",
-    "outputDirectory": ".next"
+  "version": 2,
+  "name": "noshowiq-fullstack",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "framework": "nextjs"
 }
