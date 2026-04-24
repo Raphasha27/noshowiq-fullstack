@@ -2,82 +2,53 @@ name: Continuous Integration
 
 on:
   workflow_dispatch:
-
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  frontend:
+  frontend: 
     name: Frontend (Next.js)
-    runs-on:
-  workflow_dispatch:
- ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    runs-on: - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version:
-  workflow_dispatch:
- '20'
-          cache: 'npm'
-      - name: Install dependencies
+          node-version: - name: Install dependencies
         run: npm install
       - name: Build
         run: npm run build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
+        env: 
+    NEXT_TELEMETRY_DISABLED: 1
 
-  dotnet:
+  dotnet: 
     name: .NET API
-    runs-on:
-  workflow_dispatch:
- ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    runs-on: - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version:
-  workflow_dispatch:
- '8.0.x'
-      - name: Restore
-        run: dotnet restore
+   run: dotnet restore
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-  ml_engine:
+  ml_engine: 
     name: ML Engine (Python)
-    runs-on:
-  workflow_dispatch:
- ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ml_engine
+    runs-on: run: working-directory: ./ml_engine
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version:
-  workflow_dispatch:
- '3.11'
-          cache: 'pip'
-      - name: Install dependencies
+          python-version: - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint
         run: python -m py_compile $(find . -name "*.py" | head -20) || true
 
-  security_scan:
+  security_scan: 
     name: Security Scan (Trivy)
     needs: [frontend, dotnet, ml_engine]
-    runs-on:
-  workflow_dispatch:
- ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    runs-on: - uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -86,5 +57,3 @@ jobs:
           format: 'table'
           exit-code: '0'
           severity: 'CRITICAL,HIGH'
-
-
