@@ -1,16 +1,7 @@
-version: 2
+﻿version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    labels: []
-    groups:
-      dependencies:
-        patterns:
-          - "*"
-    open-pull-requests-limit: 10
-
-
+    open-pull-requests-limit: 3
