@@ -1,207 +1,189 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./page.module.css";
+import {
+  DEMO_CREDENTIALS,
+  clearLoginLockState,
+  readDemoUser,
+  readLoginLockState,
+  recordFailedLogin,
+  saveDemoUser,
+  validateDemoCredentials,
+} from "@/lib/demoSession";
 
-export default function Login() {
+export default function LoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState<{ type: "info" | "error" | "success"; text: string }>({
+    type: "info",
+    text: "This login is for demo access only. Do not enter real patient, clinic, or payment credentials.",
+  });
+  const [clock, setClock] = useState(Date.now());
+  const lockState = readLoginLockState();
+  const secondsRemaining = Math.max(0, Math.ceil((lockState.lockedUntil - clock) / 1000));
+  const isLocked = lockState.lockedUntil > clock;
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  const primaryDemo = useMemo(() => DEMO_CREDENTIALS[0], []);
+
+  useEffect(() => {
+    if (readDemoUser()) {
+      router.replace("/dashboard");
+      return;
+    }
+
+    if (!isLocked) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => setClock(Date.now()), 1000);
+    return () => window.clearInterval(intervalId);
+  }, [isLocked, router]);
+
+  const applyDemoCredentials = () => {
+    setEmail(primaryDemo.email);
+    setPassword(primaryDemo.password);
+    setMessage({
+      type: "info",
+      text: "Demo credentials loaded. Use these only in this sandboxed preview.",
+    });
+  };
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
-    setError('');
 
-    // Simulate login delay
-    setTimeout(() => {
-      if ((email === 'admin@noshowiq.com' || email === 'doctor@clinic.com') && (password === 'demo123' || password === 'demo')) {
-        localStorage.setItem('user', JSON.stringify({ name: 'Dr. Sarah Connor', role: 'admin' }));
-        setLoading(false);
-        router.push('/dashboard');
-      } else {
-        setError('Invalid email or password');
-        setLoading(false);
-      }
-    }, 1500);
+    if (isLocked) {
+      setMessage({
+        type: "error",
+        text: `Too many failed demo attempts. Try again in ${secondsRemaining} seconds.`,
+      });
+      setLoading(false);
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const user = validateDemoCredentials(email, password);
+    if (!user) {
+      const nextState = recordFailedLogin();
+
+      setMessage({
+        type: "error",
+        text:
+          nextState.lockedUntil > 0
+            ? "Demo access is locked for 60 seconds after repeated failures."
+            : `Invalid demo credentials. ${nextState.remainingAttempts} attempt${nextState.remainingAttempts === 1 ? "" : "s"} remaining before lockout.`,
+      });
+      setLoading(false);
+      return;
+    }
+
+    clearLoginLockState();
+    saveDemoUser(user);
+    setMessage({
+      type: "success",
+      text: `Signed in as ${user.name}. This session is temporary and stored only for the current browser session.`,
+    });
+    setLoading(false);
+    router.push("/dashboard");
   };
 
   return (
-    <main style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f8fafc',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Background Blobs */}
-      <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%)', borderRadius: '50%', zIndex: 0 }}></div>
-      <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(79,70,229,0.1) 0%, transparent 70%)', borderRadius: '50%', zIndex: 0 }}></div>
-
-      <div className="login-card" style={{ 
-        width: '100%', 
-        maxWidth: '420px', 
-        padding: '3rem', 
-        background: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: '24px', 
-        boxShadow: '0 20px 40px -5px rgba(0, 0, 0, 0.1)',
-        border: '1px solid rgba(255, 255, 255, 0.5)'
-      }}>
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <div style={{ 
-            width: '48px', 
-            height: '48px', 
-            background: 'linear-gradient(135deg, #2563eb, #4f46e5)', 
-            borderRadius: '12px', 
-            margin: '0 auto 1.5rem', 
-            color: 'white', 
-            display: 'grid', 
-            placeItems: 'center',
-            fontSize: '1.2rem',
-            fontWeight: 800,
-            boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)'
-          }}>IQ</div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>Welcome Back</h1>
-          <p style={{ color: '#64748b' }}>Sign in to access your clinic dashboard</p>
-        </div>
-
-        {error && (
-          <div style={{ 
-            marginBottom: '1rem', 
-            padding: '12px', 
-            borderRadius: '12px', 
-            background: '#fee2e2', 
-            color: '#dc2626', 
-            fontSize: '0.9rem', 
-            fontWeight: 600,
-            textAlign: 'center',
-            border: '1px solid #fecaca'
-          }}>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.5rem' }}>Email Address</label>
-            <input 
-              type="email" 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="doctor@clinic.com"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '12px',
-                border: '1px solid #e2e8f0',
-                background: '#f8fafc',
-                fontSize: '1rem',
-                color: '#0f172a',
-                outline: 'none',
-                transition: 'all 0.2s',
-              }}
-              className="input-field"
-            />
+    <main className={styles.page}>
+      <div className={styles.shell}>
+        <section className={styles.hero}>
+          <span className={styles.badge}>Healthcare Scheduling Demo</span>
+          <div>
+            <h1>Reduce no-shows without pretending demo auth is production auth.</h1>
+            <p>
+              NoShowIQ is running in a demo mode for secure review and QA. Sessions are stored in
+              session storage only, failed attempts are throttled, and all data remains mock data.
+            </p>
           </div>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Password</label>
-              <a href="#" style={{ fontSize: '0.85rem', color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}>Forgot?</a>
+          <div className={styles.credentialGrid}>
+            {DEMO_CREDENTIALS.map((credential) => (
+              <div key={credential.email} className={styles.credentialCard}>
+                <h2>{credential.role === "admin" ? "Admin operator" : "Clinician operator"}</h2>
+                <div className={styles.credentialRow}>
+                  <span>Email</span>
+                  <code>{credential.email}</code>
+                </div>
+                <div className={styles.credentialRow}>
+                  <span>Password</span>
+                  <code>{credential.password}</code>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.card}>
+          <div className={styles.brand}>
+            <div className={styles.brandMark}>IQ</div>
+            <div className={styles.brandText}>
+              <span>Demo operator access</span>
+              <strong>NoShowIQ</strong>
             </div>
-            <input 
-              type="password" 
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '12px',
-                border: '1px solid #e2e8f0',
-                background: '#f8fafc',
-                fontSize: '1rem',
-                color: '#0f172a',
-                outline: 'none',
-                transition: 'all 0.2s',
-              }}
-              className="input-field"
-            />
           </div>
 
-          <button 
-            type="submit" 
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '14px',
-              background: 'linear-gradient(135deg, #2563eb, #4f46e5)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-              transition: 'transform 0.1s',
-              boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)'
-            }}
+          <div
+            className={`${styles.notice} ${
+              message.type === "error"
+                ? styles.error
+                : message.type === "success"
+                  ? styles.success
+                  : styles.info
+            }`}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
-          </button>
-        </form>
+            {message.text}
+          </div>
 
-        <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
-          Don't have an account? <a href="#" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Contact Admin</a>
-        </div>
+          <form className={styles.form} onSubmit={handleLogin}>
+            <div className={styles.field}>
+              <label htmlFor="email">Demo email</label>
+              <input
+                autoComplete="username"
+                id="email"
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="doctor@clinic.com"
+                type="email"
+                value={email}
+              />
+            </div>
 
-        {/* Demo Credentials Hint */}
-        <div style={{ marginTop: '24px', padding: '16px', background: '#eff6ff', borderRadius: '12px', border: '1px dashed #bfdbfe' }}>
-           <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e40af', marginBottom: '8px', textTransform: 'uppercase' }}>Demo Credentials</div>
-           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '4px' }}>
-              <span>Email:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>admin@noshowiq.com</span>
-           </div>
-           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '12px' }}>
-              <span>Pass:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>demo123</span>
-           </div>
-           <button 
-             type="button"
-             onClick={() => {
-               setEmail('admin@noshowiq.com');
-               setPassword('demo123');
-             }}
-             style={{
-               width: '100%',
-               padding: '8px',
-               background: 'white',
-               border: '1px solid #bfdbfe',
-               borderRadius: '8px',
-               color: '#2563eb',
-               fontSize: '0.8rem',
-               fontWeight: 600,
-               cursor: 'pointer'
-             }}
-           >
-             ⚡ Auto-Fill Demo User
-           </button>
-        </div>
+            <div className={styles.field}>
+              <label htmlFor="password">Demo password</label>
+              <input
+                autoComplete="current-password"
+                id="password"
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="demo123"
+                type="password"
+                value={password}
+              />
+            </div>
+
+            <div className={styles.actions}>
+              <button className={styles.primaryButton} disabled={loading || isLocked} type="submit">
+                {isLocked ? `Locked for ${secondsRemaining}s` : loading ? "Signing In..." : "Start Demo Session"}
+              </button>
+              <button className={styles.secondaryButton} disabled={loading} onClick={applyDemoCredentials} type="button">
+                Use Admin Demo Credentials
+              </button>
+            </div>
+          </form>
+
+          <p className={styles.helperText}>
+            This page does not support password recovery or real user accounts. If you are reviewing
+            security, treat every credential shown here as public demo data.
+          </p>
+        </section>
       </div>
-
-      <style jsx>{`
-        .input-field:focus {
-          border-color: #2563eb !important;
-          background: white !important;
-          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
-        }
-      `}</style>
     </main>
   );
 }

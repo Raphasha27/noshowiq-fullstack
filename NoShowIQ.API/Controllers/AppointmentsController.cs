@@ -30,11 +30,15 @@ public class AppointmentsController : ControllerBase
     public async Task<IActionResult> PredictRisk(Guid id)
     {
         var result = await _appointmentService.PredictRiskAsync(id);
+        if (result is null)
+        {
+            return NotFound(new { message = "Appointment not found." });
+        }
         
         // Notify frontend in real-time
         if (result.Risk == RiskLevel.High)
         {
-            await _hubContext.Clients.All.SendAsync("RiskAlert", 
+            await _hubContext.Clients.Group(NotificationHub.DashboardGroup).SendAsync("RiskAlert", 
                 $"High Risk Detected for {result.PatientName}", "high");
         }
         
