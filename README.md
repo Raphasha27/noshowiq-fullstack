@@ -2,7 +2,7 @@
 ### Production-Grade Enterprise Platform
 
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
-![Build](https://github.com/Raphasha27/noshowiq-fullstack/actions/workflows/ci.yml/badge.svg?style=flat-square)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed-Vercel-000?logo=vercel&logoColor=white)](https://noshowiq-fullstack.vercel.app)
 ![Stars](https://img.shields.io/github/stars/Raphasha27/noshowiq-fullstack?style=social)
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://noshowiq-fullstack.vercel.app)
 
