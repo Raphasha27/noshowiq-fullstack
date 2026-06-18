@@ -4,6 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 ![Build](https://github.com/Raphasha27/noshowiq-fullstack/actions/workflows/ci.yml/badge.svg?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/Raphasha27/noshowiq-fullstack?style=social)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://noshowiq-fullstack.vercel.app)
 
 ---
 
