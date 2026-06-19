@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Activity, MapPin, Pill, Users, TrendingUp, AlertCircle,
-  CheckCircle, Clock, Send, MoreVertical, Heart, Bell, Settings,
-  ChevronDown, Calendar, Truck, Search, Menu, X, Filter, Download, Plus, ChevronRight
+  Activity, MapPin, Calendar, Users, TrendingUp, AlertCircle,
+  CheckCircle, Clock, Send, MoreVertical, Bell, Settings,
+  ChevronDown, Truck, Search, Menu, X, Filter, Download, Plus, ChevronRight, DollarSign, MessageSquare
 } from 'lucide-react';
 import Link from 'next/link';
 import AIChatbot from '../components/AIChatbot';
@@ -20,91 +20,92 @@ const InteractiveMap = dynamic(() => import('../components/InteractiveMap'), {
   )
 });
 
-// Mock data for SA rural clinics
+// Premium Medical Cross Icon SVG Component
+function MedicalCrossIcon({ className = "w-6 h-6 text-white" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 3H15V9H21V15H15V21H9V15H3V9H9V3Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+// Mock data for Private Medical Centres
 const clinicsData = [
   {
     id: 1,
-    name: 'Vuwani Community Clinic',
-    province: 'Limpopo',
-    type: 'Primary Healthcare',
-    predictedPatients: 287,
-    capacity: 250,
-    risk: 'high',
-    medicineAlerts: 3,
-    staffGap: 2,
-    latitude: -22.9491,
-    longitude: 30.4256
+    name: 'Sandton Specialist Medical Centre',
+    province: 'Gauteng',
+    type: 'Multi-Specialty Suite',
+    predictedPatients: 24, // appointments today
+    capacity: 28, // slots available
+    risk: 'high', // high no-show risk detected
+    medicineAlerts: 3, // appointments at high risk
+    staffGap: 2, // predicted lost slots
+    latitude: -26.1076,
+    longitude: 28.0567
   },
   {
     id: 2,
-    name: 'Lusikisiki CHC',
-    province: 'Eastern Cape',
-    type: 'Community Health Centre',
-    predictedPatients: 156,
-    capacity: 200,
+    name: 'Rosebank Medical Suites',
+    province: 'Gauteng',
+    type: 'Primary Care Center',
+    predictedPatients: 42,
+    capacity: 45,
     risk: 'low',
     medicineAlerts: 0,
     staffGap: 0,
-    latitude: -31.3636,
-    longitude: 29.5819
+    latitude: -26.1450,
+    longitude: 28.0436
   },
   {
     id: 3,
-    name: 'Nquthu District Clinic',
-    province: 'KwaZulu-Natal',
-    type: 'Primary Healthcare',
-    predictedPatients: 198,
-    capacity: 180,
+    name: 'Cape Town Specialist Centre',
+    province: 'Western Cape',
+    type: 'Cardiology Clinic',
+    predictedPatients: 18,
+    capacity: 22,
     risk: 'medium',
     medicineAlerts: 1,
     staffGap: 1,
-    latitude: -28.2167,
-    longitude: 30.3167
+    latitude: -33.9249,
+    longitude: 18.4241
   },
   {
     id: 4,
-    name: 'Makhado Mobile Unit',
-    province: 'Limpopo',
-    type: 'Mobile Clinic',
-    predictedPatients: 134,
-    capacity: 150,
+    name: 'Pretoria Family Care Suite',
+    province: 'Gauteng',
+    type: 'Paediatric & Family Care',
+    predictedPatients: 31,
+    capacity: 32,
     risk: 'low',
     medicineAlerts: 0,
     staffGap: 0,
-    latitude: -23.0494,
-    longitude: 29.9090
+    latitude: -25.7479,
+    longitude: 28.2293
   }
 ];
 
-const medicineAlertsData = [
-  { name: 'ARV (HIV Treatment)', daysLeft: 4, risk: 'high', clinic: 'Vuwani Community Clinic' },
-  { name: 'TB Medication', daysLeft: 11, risk: 'medium', clinic: 'Nquthu District Clinic' },
-  { name: 'Paracetamol', daysLeft: 3, risk: 'high', clinic: 'Vuwani Community Clinic' },
+const attendanceAlertsData = [
+  { name: 'Dr. A. Ndlovu (Cardiology)', riskText: '9:30 AM Appt: 84% No-Show Risk', risk: 'high', clinic: 'Sandton Specialist Medical Centre' },
+  { name: 'Dr. M. Venter (Paediatrics)', riskText: '11:15 AM Appt: 61% No-Show Risk', risk: 'medium', clinic: 'Cape Town Specialist Centre' },
+  { name: 'Dr. S. Patel (Dermatology)', riskText: '2:00 PM Appt: 78% No-Show Risk', risk: 'high', clinic: 'Sandton Specialist Medical Centre' },
 ];
 
 const recentActivity = [
-  { text: 'High patient volume predicted at Vuwani Clinic', time: '5 mins ago', type: 'alert' },
-  { text: 'Mobile clinic route optimized for Makhado', time: '12 mins ago', type: 'success' },
-  { text: 'ARV stock alert triggered', time: '23 mins ago', type: 'warning' },
-  { text: 'Staff allocation updated for Lusikisiki CHC', time: '1 hour ago', type: 'info' },
+  { text: 'High risk of no-show predicted for 9:30 AM slot (Sandton)', time: '5 mins ago', type: 'alert' },
+  { text: 'Waitlist auto-fill matched patient for Dr. Ndlovu (11:00 AM)', time: '12 mins ago', type: 'success' },
+  { text: 'WhatsApp smart-confirmation received from Mr. Khumalo', time: '23 mins ago', type: 'success' },
+  { text: 'Pretoria Suite: 98% overall attendance rate confirmed for today', time: '1 hour ago', type: 'info' },
 ];
 
 export default function Dashboard() {
   const [selectedClinic, setSelectedClinic] = useState(clinicsData[0]);
 
-  const getRiskColor = (risk: string) => {
-    switch (risk) {
-      case 'high': return 'bg-red-100 text-red-700 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      default: return 'bg-green-100 text-green-700 border-green-200';
-    }
-  };
-
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case 'high': return 'bg-red-50 text-red-700 border border-red-200';
-      case 'medium': return 'bg-yellow-50 text-yellow-700 border border-yellow-200';
-      default: return 'bg-green-50 text-green-700 border border-green-200';
+      case 'high': return 'bg-rose-50 text-rose-700 border border-rose-200';
+      case 'medium': return 'bg-amber-50 text-amber-700 border border-amber-200';
+      default: return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
     }
   };
 
@@ -114,45 +115,47 @@ export default function Dashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       const newAlert = {
-        text: 'New appointment booked at Vuwani Clinic',
+        text: 'Smart reminder answered: Slot at Rosebank Suite confirmed',
         time: 'Just now',
         type: 'success'
       };
-      // Add new alert and keep only latest 5
-      setAlerts(prev => [newAlert, ...prev.slice(0, 4)]);
-    }, 45000); // New alert every 45 seconds
+      setAlerts(prev => [newAlert, ...prev.slice(0, 3)]);
+    }, 45000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-gray-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-blue-50/30">
 
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-[1600px] mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Heart className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/25">
+                <MedicalCrossIcon className="w-5 h-5 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                HealthBridge AI
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                NoShowIQ
               </span>
             </Link>
-            <div className="ml-8 flex items-center gap-2 text-sm">
+            <div className="ml-8 flex items-center gap-2 text-sm border-l border-slate-200 pl-6">
               <MapPin className="w-4 h-4 text-blue-600" />
-              <span className="text-gray-700 font-medium">Clinic Dashboard</span>
+              <span className="text-slate-700 font-semibold">Specialist Practices Registry</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/dashboard/notifications" className="p-2 hover:bg-gray-100 rounded-lg transition relative">
-              <Bell className="w-5 h-5 text-gray-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <div className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-lg border border-slate-200">
+              Demo Credentials: admin / testpass
+            </div>
+            <Link href="/dashboard/notifications" className="p-2 hover:bg-slate-100 rounded-lg transition relative">
+              <Bell className="w-5 h-5 text-slate-600" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>
             </Link>
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition">
-              <Settings className="w-5 h-5 text-gray-600" />
+            <button className="p-2 hover:bg-slate-100 rounded-lg transition">
+              <Settings className="w-5 h-5 text-slate-600" />
             </button>
           </div>
         </div>
@@ -162,74 +165,74 @@ export default function Dashboard() {
 
         {/* Top Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200 hover:shadow-lg transition">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Daily Patient Volume</p>
-                <div className="text-3xl font-bold text-gray-900 mt-2">775</div>
-                <p className="text-xs text-gray-500 mt-1">Across 4 clinics</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Scheduled Today</p>
+                <div className="text-3xl font-black text-slate-900 mt-2">115</div>
+                <p className="text-xs text-slate-500 mt-1">Across 4 private centers</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Activity className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-blue-600" />
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <TrendingUp className="w-4 h-4 text-green-600" />
-              <span className="text-green-600 font-semibold">+12%</span>
-              <span className="text-gray-500">vs yesterday</span>
+              <TrendingUp className="w-4 h-4 text-emerald-600" />
+              <span className="text-emerald-600 font-semibold">+8%</span>
+              <span className="text-slate-500">vs weekly average</span>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-6 hover:shadow-lg transition">
+          <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 border border-rose-200 rounded-2xl p-6 hover:shadow-lg transition">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm text-red-700 font-medium">Medicine Stock Alerts</p>
-                <div className="text-3xl font-bold text-red-900 mt-2">4</div>
-                <p className="text-xs text-red-700 mt-1 flex items-center gap-1">
+                <p className="text-xs text-rose-800 font-bold uppercase tracking-wider">Revenue at Risk</p>
+                <div className="text-3xl font-black text-rose-900 mt-2">R14,800</div>
+                <p className="text-xs text-rose-700 mt-1 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  Action Required
+                  3 High-Risk No-Shows
                 </p>
               </div>
-              <div className="w-12 h-12 bg-red-200 rounded-xl flex items-center justify-center">
-                <Pill className="w-6 h-6 text-red-700" />
+              <div className="w-12 h-12 bg-rose-200/50 rounded-xl flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-rose-700" />
               </div>
             </div>
-            <button className="w-full mt-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition">
-              View Alerts
+            <button className="w-full mt-2 px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-semibold hover:bg-rose-700 transition shadow-sm shadow-rose-600/10">
+              Trigger Reminders
             </button>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200 hover:shadow-lg transition">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Clinics Served</p>
-                <div className="text-3xl font-bold text-gray-900 mt-2">127</div>
-                <p className="text-xs text-gray-500 mt-1">This month</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Practitioners Protected</p>
+                <div className="text-3xl font-black text-slate-900 mt-2">34</div>
+                <p className="text-xs text-slate-500 mt-1">Specialists active</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-emerald-600" />
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <CheckCircle className="w-4 h-4 text-green-600" />
-              <span className="text-green-600 font-semibold">98%</span>
-              <span className="text-gray-500">uptime</span>
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
+              <span className="text-emerald-600 font-semibold">100%</span>
+              <span className="text-slate-500">sync status</span>
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200 hover:shadow-lg transition">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Resource Allocation</p>
-                <div className="text-3xl font-bold text-gray-900 mt-2">94%</div>
-                <p className="text-xs text-gray-500 mt-1">Target: 95%</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Average Attendance Rate</p>
+                <div className="text-3xl font-black text-slate-900 mt-2">96.2%</div>
+                <p className="text-xs text-slate-500 mt-1">Target: 95.0%</p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-cyan-50 border border-cyan-100 rounded-xl flex items-center justify-center">
+                <Activity className="w-6 h-6 text-cyan-600" />
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full" style={{ width: '94%' }}></div>
+            <div className="w-full bg-slate-200 rounded-full h-2 mt-2">
+              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full" style={{ width: '96.2%' }}></div>
             </div>
           </div>
         </div>
@@ -239,83 +242,83 @@ export default function Dashboard() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Clinic Overview Table */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-900">Today&apos;s Clinic Overview</h2>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">February 6, 2026</span>
+            {/* Practice Overview Table */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+                <h2 className="text-lg font-bold text-slate-900">Today's Attendance Overview</h2>
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  <Calendar className="w-4 h-4 text-slate-400" />
+                  <span>June 19, 2026</span>
                 </div>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50/50">
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Clinic</th>
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Province</th>
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Predicted Volume</th>
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Risk Level</th>
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
+                    <tr className="border-b border-slate-200 bg-slate-50/50">
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Practice / Center</th>
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Location</th>
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Booked Slots</th>
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">No-Show Risk Status</th>
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Smart Outreach</th>
+                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {clinicsData.map((clinic) => (
-                      <tr key={clinic.id} className="border-b border-gray-100 hover:bg-blue-50/30 transition cursor-pointer" onClick={() => setSelectedClinic(clinic)}>
+                      <tr key={clinic.id} className="border-b border-slate-100 hover:bg-blue-50/30 transition cursor-pointer" onClick={() => setSelectedClinic(clinic)}>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center text-white font-black text-sm">
                               {clinic.name.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-gray-900">{clinic.name}</div>
-                              <div className="text-xs text-gray-500">{clinic.type}</div>
+                              <div className="font-bold text-slate-950 text-sm">{clinic.name}</div>
+                              <div className="text-xs text-slate-500">{clinic.type}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{clinic.province}</td>
+                        <td className="px-6 py-4 text-sm text-slate-700">{clinic.province}</td>
                         <td className="px-6 py-4">
-                          <div className="text-sm font-semibold text-gray-900">{clinic.predictedPatients} patients</div>
-                          <div className="text-xs text-gray-500">Capacity: {clinic.capacity}</div>
+                          <div className="text-sm font-bold text-slate-900">{clinic.predictedPatients} slots filled</div>
+                          <div className="text-xs text-slate-500">Max Capacity: {clinic.capacity}</div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getRiskBadge(clinic.risk)}`}>
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${getRiskBadge(clinic.risk)}`}>
                             {clinic.risk === 'high' && '🔴'}
                             {clinic.risk === 'medium' && '🟡'}
                             {clinic.risk === 'low' && '🟢'}
-                            {clinic.risk} Risk
+                            <span className="capitalize ml-1">{clinic.risk} Risk</span>
                           </span>
                         </td>
                         <td className="px-6 py-4">
                           {clinic.medicineAlerts > 0 ? (
-                            <div className="flex items-center gap-1 text-orange-600">
+                            <div className="flex items-center gap-1.5 text-rose-600">
                               <AlertCircle className="w-4 h-4" />
-                              <span className="text-xs font-medium">{clinic.medicineAlerts} alerts</span>
+                              <span className="text-xs font-bold">{clinic.medicineAlerts} high-risk</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1 text-green-600">
+                            <div className="flex items-center gap-1.5 text-emerald-600">
                               <CheckCircle className="w-4 h-4" />
-                              <span className="text-xs font-medium">All good</span>
+                              <span className="text-xs font-bold">Stable</span>
                             </div>
                           )}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             {clinic.risk === 'high' && (
-                              <button className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition">
-                                Allocate Staff
+                              <button className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition shadow-sm">
+                                Auto-Fill Queue
                               </button>
                             )}
                             {clinic.medicineAlerts > 0 && (
-                              <button className="px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-semibold hover:bg-gray-50 transition flex items-center gap-1">
-                                <Send className="w-3 h-3" />
-                                Order Meds
+                              <button className="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition flex items-center gap-1">
+                                <Send className="w-3 h-3 text-slate-500" />
+                                Send SMS
                               </button>
                             )}
-                            <button className="p-1.5 hover:bg-gray-100 rounded-lg transition">
-                              <MoreVertical className="w-4 h-4 text-gray-400" />
+                            <button className="p-1.5 hover:bg-slate-100 rounded-lg transition">
+                              <MoreVertical className="w-4 h-4 text-slate-400" />
                             </button>
                           </div>
                         </td>
@@ -333,46 +336,46 @@ export default function Dashboard() {
           {/* Right Sidebar */}
           <div className="space-y-6">
 
-            {/* Optimization Insights */}
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-2xl p-6">
+            {/* Predictive Revenue Insights */}
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <AlertCircle className="w-5 h-5 text-orange-600" />
-                <h3 className="font-bold text-orange-900">Optimization Insights</h3>
+                <AlertCircle className="w-5 h-5 text-amber-600" />
+                <h3 className="font-bold text-amber-900 text-sm uppercase tracking-wider">Predictive Insights</h3>
               </div>
-              <div className="bg-white/60 rounded-xl p-4 mb-3">
-                <div className="font-semibold text-orange-900 text-sm mb-2">🔴 High Risk Detected</div>
-                <p className="text-sm text-gray-700 mb-3">
-                  <strong>Vuwani Community Clinic</strong> has a predicted volume of 287 patients exceeding capacity (250).
-                  Consider adding 2 additional staff.
+              <div className="bg-white/70 rounded-xl p-4 mb-3 border border-amber-100">
+                <div className="font-bold text-rose-700 text-xs uppercase mb-2">🔴 Attendance Alert</div>
+                <p className="text-sm text-slate-700 mb-3 leading-relaxed">
+                  <strong>Sandton Medical Centre</strong> has 3 specialist appointments at 80%+ no-show probability for today (value: R5,800). Smart reminders dispatched.
                 </p>
-                <button className="w-full px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-semibold hover:bg-orange-700 transition">
-                  Apply Optimization
+                <button className="w-full px-4 py-2 bg-amber-600 text-white rounded-lg text-xs font-bold hover:bg-amber-700 transition">
+                  Activate Waitlist Auto-Fill
                 </button>
               </div>
-              <div className="text-xs text-orange-700">
-                Next pension week: <strong>Feb 12-14</strong> (High surge expected)
+              <div className="text-xs text-amber-800 font-semibold">
+                🔔 Expected peak no-show days: <strong>Mondays (8:00 AM - 10:00 AM)</strong>
               </div>
             </div>
 
-            {/* Medicine Alerts */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 className="font-bold text-gray-900">Medicine Stock Alerts</h3>
-                <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full font-semibold">{medicineAlertsData.length}</span>
+            {/* High-Risk Appointments */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200">
+              <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+                <h3 className="font-bold text-slate-900">Immediate Risk Log</h3>
+                <span className="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">{attendanceAlertsData.length}</span>
               </div>
               <div className="p-4 space-y-3">
-                {medicineAlertsData.map((med, i) => (
-                  <div key={i} className={`p-4 rounded-xl border ${med.risk === 'high' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'}`}>
+                {attendanceAlertsData.map((med, i) => (
+                  <div key={i} className={`p-4 rounded-xl border ${med.risk === 'high' ? 'bg-rose-50/50 border-rose-200' : 'bg-amber-50/50 border-amber-200'}`}>
                     <div className="flex justify-between items-start mb-2">
-                      <div className="font-semibold text-sm text-gray-900">{med.name}</div>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${med.risk === 'high' ? 'bg-red-600 text-white' : 'bg-yellow-600 text-white'}`}>
-                        {med.daysLeft} days left
+                      <div className="font-bold text-xs text-slate-900">{med.name}</div>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${med.risk === 'high' ? 'bg-rose-600 text-white' : 'bg-amber-600 text-white'}`}>
+                        {med.risk.toUpperCase()} RISK
                       </span>
                     </div>
-                    <div className="text-xs text-gray-600 mb-3">{med.clinic}</div>
-                    <button className="w-full px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-lg text-xs font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1">
-                      <Truck className="w-3 h-3" />
-                      Order Restock
+                    <div className="text-xs text-slate-600 mb-1">{med.riskText}</div>
+                    <div className="text-[10px] text-slate-400 mb-3">{med.clinic}</div>
+                    <button className="w-full px-3 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition flex items-center justify-center gap-1.5">
+                      <MessageSquare className="w-3 h-3 text-slate-500" />
+                      Propose Reschedule
                     </button>
                   </div>
                 ))}
@@ -380,20 +383,20 @@ export default function Dashboard() {
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="font-bold text-gray-900">Recent Activity</h3>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200">
+              <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+                <h3 className="font-bold text-slate-900">Activity Log</h3>
               </div>
               <div className="p-4 space-y-3">
                 {alerts.map((activity, i) => (
-                  <div key={i} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0">
-                    <div className={`w-2 h-2 rounded-full mt-1.5 ${activity.type === 'alert' ? 'bg-red-500' :
-                      activity.type === 'success' ? 'bg-green-500' :
-                        activity.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+                  <div key={i} className="flex items-start gap-3 pb-3 border-b border-slate-100 last:border-0">
+                    <div className={`w-2 h-2 rounded-full mt-1.5 ${activity.type === 'alert' ? 'bg-rose-500' :
+                      activity.type === 'success' ? 'bg-emerald-500' :
+                        activity.type === 'warning' ? 'bg-amber-500' : 'bg-blue-500'
                       }`}></div>
                     <div className="flex-1">
-                      <p className="text-sm text-gray-90 animate-pulse-once">{activity.text}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{activity.time}</p>
+                      <p className="text-xs font-medium text-slate-800">{activity.text}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{activity.time}</p>
                     </div>
                   </div>
                 ))}
@@ -408,3 +411,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

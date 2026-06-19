@@ -13,7 +13,7 @@ interface Message {
 export default function AIChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hello! I'm HealthBridge AI. Ask me about clinic status, stock levels, or predictions.", sender: 'ai', time: 'Just now' }
+        { id: 1, text: "Hello! I'm the NoShowIQ Assistant. Ask me about appointment attendance predictions, scheduling risk, or revenue optimization.", sender: 'ai', time: 'Just now' }
     ]);
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
@@ -46,20 +46,20 @@ export default function AIChatbot() {
             let responseText = "I'm not sure about that specific detail yet.";
             const lowerInput = userMsg.text.toLowerCase();
 
-            if (lowerInput.includes("vuwani") || lowerInput.includes("clinic")) {
-                responseText = "Vuwani Community Clinic is currently at **High Risk**. Patient volume is predicted to exceed capacity by 15% tomorrow. I recommend dispatching 2 additional nurses.";
-            } else if (lowerInput.includes("stock") || lowerInput.includes("medicine")) {
-                responseText = "Critical Alert: Paracetamol stock is low at 3 clinics in Limpopo. A restock order has been automatically drafted.";
-            } else if (lowerInput.includes("mobile") || lowerInput.includes("route")) {
-                responseText = "The Makhado Mobile Unit is currently en route to Malamulele. ETA is 45 minutes. The route has been optimized to save 12km today.";
-            } else if (lowerInput.includes("gauteng") || lowerInput.includes("soweto")) {
-                responseText = "Soweto Community Health Centre is currently experiencing high patient volume. 3 additional locum nurses have been recommended.";
+            if (lowerInput.includes("sandton") || lowerInput.includes("specialist")) {
+                responseText = "Sandton Specialist Medical Centre has **3 appointments flagged as High Risk** of no-show today (Dr. Ndlovu and Dr. Patel). Auto-reminders have been dispatched, and waitlist auto-fill is on standby.";
+            } else if (lowerInput.includes("revenue") || lowerInput.includes("billing") || lowerInput.includes("loss")) {
+                responseText = "Average recovered revenue this week is **R14,800** by auto-filling 4 canceled slots. Active risk monitoring has saved R42,500 this month.";
+            } else if (lowerInput.includes("reminders") || lowerInput.includes("sms") || lowerInput.includes("whatsapp")) {
+                responseText = "Smart conversational reminders have a **92% confirmation rate**. High-risk slots are automatically sent interactive cancel/reschedule buttons.";
+            } else if (lowerInput.includes("gauteng") || lowerInput.includes("rosebank")) {
+                responseText = "Rosebank Medical Suites currently shows an average **96.2% attendance rate**. No immediate no-show actions required for today's remaining slots.";
             } else if (lowerInput.includes("western cape") || lowerInput.includes("cape town")) {
-                responseText = "Khayelitsha District Hospital has adequate stock levels, but TB medication is trending low. A resupply is scheduled for Tuesday.";
-            } else if (lowerInput.includes("kzn") || lowerInput.includes("natal")) {
-                responseText = "Umlazi V Section Clinic has a critical shortage of Insulin. An emergency transfer from King Edward VIII Hospital has been initiated.";
+                responseText = "Cape Town Specialist Centre (Cardiology) has **1 medium-risk slot** at 11:15 AM (Dr. Venter). Standard SMS reminder confirmed.";
+            } else if (lowerInput.includes("waitlist") || lowerInput.includes("auto-fill")) {
+                responseText = "Waitlist Auto-Fill has 14 opt-in patients ready to claim empty slots. Average matching time for a canceled slot is **8.2 minutes**.";
             } else {
-                responseText = "I can help you optimize resource allocation across all 9 provinces. Try asking about specific clinics in Gauteng, KZN, or Limpopo.";
+                responseText = "I can help you track attendance and protect revenue across your practices. Try asking about Sandton, Cape Town, smart reminders, or waitlist auto-fill.";
             }
 
             const aiMsg: Message = {
@@ -83,7 +83,7 @@ export default function AIChatbot() {
             {/* Floating Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 ${isOpen ? 'bg-red-500 rotate-90' : 'bg-gradient-to-r from-blue-600 to-purple-600'}`}
+                className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 ${isOpen ? 'bg-rose-500 rotate-90' : 'bg-gradient-to-r from-blue-600 to-cyan-500'}`}
             >
                 {isOpen ? <X className="w-6 h-6 text-white" /> : <Bot className="w-8 h-8 text-white" />}
                 {!isOpen && (
@@ -94,15 +94,15 @@ export default function AIChatbot() {
             {/* Chat Window */}
             <div className={`fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden transform transition-all duration-300 origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex items-center gap-3">
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-4 flex items-center gap-3">
                     <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
                         <Bot className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h3 className="text-white font-bold text-sm">HealthBridge Assistant</h3>
+                        <h3 className="text-white font-bold text-sm">NoShowIQ Assistant</h3>
                         <div className="flex items-center gap-1.5">
                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                            <span className="text-blue-100 text-xs">Online • 98% Accuracy</span>
+                            <span className="text-blue-100 text-xs">Online • 94.8% Accuracy</span>
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export default function AIChatbot() {
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder="Ask about resources..."
+                            placeholder="Ask about practice status or revenue..."
                             className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
                         />
                         <button
@@ -153,3 +153,4 @@ export default function AIChatbot() {
         </>
     );
 }
+

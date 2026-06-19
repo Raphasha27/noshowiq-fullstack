@@ -19,80 +19,80 @@ interface ClinicMarker {
 const clinicsData: ClinicMarker[] = [
     {
         id: 1,
-        name: 'Vuwani Community Clinic',
-        province: 'Limpopo',
-        type: 'Primary Healthcare',
-        predictedPatients: 287,
-        capacity: 250,
+        name: 'Sandton Specialist Medical Centre',
+        province: 'Gauteng',
+        type: 'Multi-Specialty Suite',
+        predictedPatients: 24,
+        capacity: 28,
         risk: 'high',
-        latitude: -22.9491,
-        longitude: 30.4256
+        latitude: -26.1076,
+        longitude: 28.0567
     },
     {
         id: 2,
-        name: 'Lusikisiki CHC',
-        province: 'Eastern Cape',
-        type: 'Community Health Centre',
-        predictedPatients: 156,
-        capacity: 200,
+        name: 'Rosebank Medical Suites',
+        province: 'Gauteng',
+        type: 'Primary Care Center',
+        predictedPatients: 42,
+        capacity: 45,
         risk: 'low',
-        latitude: -31.3636,
-        longitude: 29.5819
+        latitude: -26.1450,
+        longitude: 28.0436
     },
     {
         id: 3,
-        name: 'Nquthu District Clinic',
-        province: 'KwaZulu-Natal',
-        type: 'Primary Healthcare',
-        predictedPatients: 198,
-        capacity: 180,
+        name: 'Cape Town Specialist Centre',
+        province: 'Western Cape',
+        type: 'Cardiology Clinic',
+        predictedPatients: 18,
+        capacity: 22,
         risk: 'medium',
-        latitude: -28.2167,
-        longitude: 30.3167
+        latitude: -33.9249,
+        longitude: 18.4241
     },
     {
         id: 4,
-        name: 'Makhado Mobile Unit',
-        province: 'Limpopo',
-        type: 'Mobile Clinic',
-        predictedPatients: 134,
-        capacity: 150,
+        name: 'Pretoria Family Care Suite',
+        province: 'Gauteng',
+        type: 'Paediatric Suite',
+        predictedPatients: 31,
+        capacity: 32,
         risk: 'low',
-        latitude: -23.0494,
-        longitude: 29.9090
+        latitude: -25.7479,
+        longitude: 28.2293
     },
     {
         id: 5,
-        name: 'Polokwane Central CHC',
-        province: 'Limpopo',
-        type: 'Community Health Centre',
-        predictedPatients: 340,
-        capacity: 400,
+        name: 'Durban Medical Hub',
+        province: 'KwaZulu-Natal',
+        type: 'Surgical Suites',
+        predictedPatients: 35,
+        capacity: 40,
         risk: 'low',
-        latitude: -23.9045,
-        longitude: 29.4689
+        latitude: -29.8587,
+        longitude: 31.0218
     },
     {
         id: 6,
-        name: 'Mthatha District Hospital',
+        name: 'Port Elizabeth Private Clinic',
         province: 'Eastern Cape',
-        type: 'District Hospital',
-        predictedPatients: 520,
-        capacity: 600,
+        type: 'Specialist Centre',
+        predictedPatients: 20,
+        capacity: 24,
         risk: 'medium',
-        latitude: -31.5845,
-        longitude: 28.7845
+        latitude: -33.9608,
+        longitude: 25.6022
     },
     {
         id: 7,
-        name: 'Ladysmith CHC',
+        name: 'Umhlanga Surgical Suites',
         province: 'KwaZulu-Natal',
-        type: 'Community Health Centre',
-        predictedPatients: 280,
-        capacity: 320,
+        type: 'Day Clinic',
+        predictedPatients: 19,
+        capacity: 20,
         risk: 'low',
-        latitude: -28.5560,
-        longitude: 29.7812
+        latitude: -29.7258,
+        longitude: 31.0664
     },
 ];
 
@@ -101,20 +101,18 @@ export default function InteractiveMap() {
     const [selectedClinic, setSelectedClinic] = useState<ClinicMarker | null>(null);
     const [mapLoaded, setMapLoaded] = useState(false);
 
-    // Mock Route Data for Mobile Clinics
+    // Mock Route Data for Specialists Home Care Calls
     const routesData = [
         {
             id: 1,
-            name: 'Makhado Mobile Route 1',
+            name: 'Optimized Specialist Visit Route 1',
             color: '#3b82f6', // blue
             coordinates: [
-                [-23.0494, 29.9090], // Makhado Mobile Unit (Start)
-                [-23.1398, 30.4190], // Vuwani (Stop 1)
-                [-22.9900, 30.6900], // Malamulele (Stop 2)
-                [-23.3167, 30.7167], // Giyani (Stop 3)
-                [-23.1550, 30.0550]  // Elim (Stop 4)
+                [-26.1076, 28.0567], // Sandton Specialist (Start)
+                [-26.1450, 28.0436], // Rosebank Medical (Stop 1)
+                [-25.7479, 28.2293]  // Pretoria Family (Stop 2)
             ] as [number, number][],
-            stopNames: ["Vuwani Clinic", "Malamulele Clinic", "Giyani Health Centre", "Elim Hospital"]
+            stopNames: ["Rosebank Suites", "Pretoria Family Care"]
         },
     ];
 
@@ -142,7 +140,7 @@ export default function InteractiveMap() {
 
                 // Add markers for each clinic
                 clinicsData.forEach((clinic) => {
-                    const markerColor = clinic.risk === 'high' ? '#dc2626' : clinic.risk === 'medium' ? '#f59e0b' : '#10b981';
+                    const markerColor = clinic.risk === 'high' ? '#e11d48' : clinic.risk === 'medium' ? '#d97706' : '#059669';
 
                     // Create custom marker icon
                     const customIcon = L.divIcon({
@@ -184,15 +182,15 @@ export default function InteractiveMap() {
               <p style="margin: 4px 0; font-size: 12px; color: #6b7280;">${clinic.province} • ${clinic.type}</p>
               <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
                 <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                  <span style="color: #6b7280;">Predicted:</span>
-                  <span style="font-weight: 600; color: #1f2937;">${clinic.predictedPatients} patients</span>
+                  <span style="color: #6b7280;">Scheduled Today:</span>
+                  <span style="font-weight: 600; color: #1f2937;">${clinic.predictedPatients} appts</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                  <span style="color: #6b7280;">Capacity:</span>
+                  <span style="color: #6b7280;">Total Slots:</span>
                   <span style="font-weight: 600; color: #1f2937;">${clinic.capacity}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                  <span style="color: #6b7280;">Risk:</span>
+                  <span style="color: #6b7280;">Attendance Risk:</span>
                   <span style="
                     font-weight: 600;
                     color: ${markerColor};
@@ -212,19 +210,19 @@ export default function InteractiveMap() {
                     });
                 });
 
-                // Render Mobile Clinic Routes
+                // Render Specialist Visit Routes
                 routesData.forEach(route => {
                     L.polyline(route.coordinates as L.LatLngExpression[], {
                         color: route.color,
                         weight: 3,
                         opacity: 0.7,
-                        dashArray: '10, 10', // Dashed line to indicate mobile route
+                        dashArray: '10, 10',
                         lineCap: 'round'
-                    }).addTo(map).bindPopup(`<b>${route.name}</b><br>Daily Distance: 45km`);
+                    }).addTo(map).bindPopup(`<b>${route.name}</b><br>Daily Route Distance: 68km`);
 
                     // Add small dots for stops
                     route.coordinates.forEach((coord, index) => {
-                        if (index > 0 && index < route.coordinates.length - 1) { // Skip start/end (since it's the clinic)
+                        if (index > 0 && index < route.coordinates.length - 1) {
                             L.circleMarker(coord as L.LatLngExpression, {
                                 radius: 4,
                                 fillColor: 'white',
@@ -232,7 +230,7 @@ export default function InteractiveMap() {
                                 weight: 2,
                                 opacity: 1,
                                 fillOpacity: 1
-                            }).addTo(map).bindPopup(`Mobile Stop #${index}`);
+                            }).addTo(map).bindPopup(`Route Stop #${index}: ${route.stopNames[index - 1]}`);
                         }
                     });
                 });
@@ -243,23 +241,23 @@ export default function InteractiveMap() {
     }, [mapLoaded]);
 
     return (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-slate-50/50">
                 <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-blue-600" />
-                    <h2 className="text-xl font-bold text-gray-900">Clinic Map - South Africa</h2>
+                    <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Practice Map - South Africa</h2>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-4 text-xs font-semibold">
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-rose-500"></div>
                         <span className="text-gray-600">High Risk</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-amber-500"></div>
                         <span className="text-gray-600">Medium Risk</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
                         <span className="text-gray-600">Low Risk</span>
                     </div>
                 </div>
@@ -278,14 +276,10 @@ export default function InteractiveMap() {
                 <button
                     onClick={() => {
                         if (mapRef.current) {
-                            // This is a bit hacky to access the leaflet map instance, 
-                            // in a real app we'd use a context or state to store the map instance
-                            // or just reload the map to user location
                             if (navigator.geolocation) {
                                 navigator.geolocation.getCurrentPosition((position) => {
                                     const { latitude, longitude } = position.coords;
-                                    alert(`Located: ${latitude}, ${longitude}`); // Visual feedback
-                                    // ideally we pan the map here if we had the instance exposed
+                                    alert(`Located: ${latitude}, ${longitude}`);
                                 });
                             }
                         }
@@ -309,11 +303,11 @@ export default function InteractiveMap() {
 
             {/* Clinic Details Panel */}
             {selectedClinic && (
-                <div className="p-6 bg-gradient-to-br from-blue-50 to-green-50 border-t border-gray-200">
+                <div className="p-6 bg-gradient-to-br from-blue-50 to-emerald-50 border-t border-gray-200">
                     <div className="flex justify-between items-start mb-3">
                         <div>
-                            <h3 className="text-lg font-bold text-gray-900">{selectedClinic.name}</h3>
-                            <p className="text-sm text-gray-600">{selectedClinic.province} • {selectedClinic.type}</p>
+                          <h3 className="text-sm font-bold text-gray-900">{selectedClinic.name}</h3>
+                          <p className="text-xs text-gray-500">{selectedClinic.province} • {selectedClinic.type}</p>
                         </div>
                         <button
                             onClick={() => setSelectedClinic(null)}
@@ -324,16 +318,16 @@ export default function InteractiveMap() {
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                         <div className="bg-white/60 rounded-lg p-3">
-                            <div className="text-xs text-gray-600 mb-1">Predicted Volume</div>
-                            <div className="text-xl font-bold text-gray-900">{selectedClinic.predictedPatients}</div>
+                            <div className="text-[10px] text-gray-500 font-semibold mb-1">Scheduled Appts</div>
+                            <div className="text-lg font-bold text-gray-900">{selectedClinic.predictedPatients}</div>
                         </div>
                         <div className="bg-white/60 rounded-lg p-3">
-                            <div className="text-xs text-gray-600 mb-1">Capacity</div>
-                            <div className="text-xl font-bold text-gray-900">{selectedClinic.capacity}</div>
+                            <div className="text-[10px] text-gray-500 font-semibold mb-1">Capacity</div>
+                            <div className="text-lg font-bold text-gray-900">{selectedClinic.capacity}</div>
                         </div>
                         <div className="bg-white/60 rounded-lg p-3">
-                            <div className="text-xs text-gray-600 mb-1">Utilization</div>
-                            <div className="text-xl font-bold text-gray-900">
+                            <div className="text-[10px] text-gray-500 font-semibold mb-1">Utilization</div>
+                            <div className="text-lg font-bold text-gray-900">
                                 {Math.round((selectedClinic.predictedPatients / selectedClinic.capacity) * 100)}%
                             </div>
                         </div>
@@ -351,3 +345,4 @@ export default function InteractiveMap() {
         </div>
     );
 }
+

@@ -1,7 +1,7 @@
 {
-  "name": "healthbridge-ai",
+  "name": "noshowiq",
   "version": "1.0.0",
-  "description": "AI-Powered Rural Healthcare Resource Allocation Platform for South Africa",
+  "description": "Healthcare No-Show Prediction Platform using Machine Learning for Private Medical Centres",
   "private": true,
   "scripts": {
     "dev": "next dev",
