@@ -11,14 +11,14 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "framer-motion": "^12.38.0",
+    "framer-motion": "^12.40.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.8.0",
     "next": "16.2.9",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-leaflet": "^5.0.0",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",
