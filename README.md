@@ -1,5 +1,5 @@
 # noshowiq-fullstack
-### Production-Grade Enterprise Platform
+### full-stack platform
 
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed-Vercel-000?logo=vercel&logoColor=white)](https://noshowiq-fullstack.vercel.app)
@@ -51,3 +51,5 @@
 ---
 
 © 2026 **Kirov Dynamics Technology** | Developed by **Raphasha27**
+
+
