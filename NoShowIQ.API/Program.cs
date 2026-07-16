@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 
 // JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["Secret"] ?? "DefaultSecretKey_MustBeLongEnoughForSecurity_ChangeInProduction";
+var secretKey = jwtSettings["Secret"] ?? Environment.GetEnvironmentVariable("JWT_SECRET") ?? "dev-secret-key-change-in-production";
 
 builder.Services.AddAuthentication(options =>
 {
