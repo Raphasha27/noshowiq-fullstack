@@ -5,7 +5,7 @@ Your app works perfectly locally but needs manual Vercel setup.
 ### ✅ Confirmed Working:
 - Build: SUCCESS (0 errors)
 - Local dev: RUNNING on http://localhost:3000
-- GitHub: All code pushed to master
+- GitHub: All code pushed to main
 
 ### ⚠️ Issue:
 Auto-deployment from GitHub isn't triggering. This usually means:
