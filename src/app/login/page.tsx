@@ -17,7 +17,7 @@ export default function Login() {
 
     // Simulate login delay
     setTimeout(() => {
-      if ((email === 'admin@noshowiq.com' || email === 'doctor@clinic.com') && (password === 'demo123' || password === 'demo')) {
+      if (email === process.env.NEXT_PUBLIC_DEMO_EMAIL && password === process.env.NEXT_PUBLIC_DEMO_PASSWORD) {
         localStorage.setItem('user', JSON.stringify({ name: 'Dr. Sarah Connor', role: 'admin' }));
         setLoading(false);
         router.push('/dashboard');
@@ -167,16 +167,16 @@ export default function Login() {
         <div style={{ marginTop: '24px', padding: '16px', background: '#eff6ff', borderRadius: '12px', border: '1px dashed #bfdbfe' }}>
            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e40af', marginBottom: '8px', textTransform: 'uppercase' }}>Demo Credentials</div>
            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '4px' }}>
-              <span>Email:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>admin@noshowiq.com</span>
+              <span>Email:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{process.env.NEXT_PUBLIC_DEMO_EMAIL || 'Set NEXT_PUBLIC_DEMO_EMAIL'}</span>
            </div>
            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#334155', marginBottom: '12px' }}>
-              <span>Pass:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>demo123</span>
+              <span>Pass:</span> <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{process.env.NEXT_PUBLIC_DEMO_PASSWORD || 'Set NEXT_PUBLIC_DEMO_PASSWORD'}</span>
            </div>
            <button 
              type="button"
              onClick={() => {
-               setEmail('admin@noshowiq.com');
-               setPassword('demo123');
+               setEmail(process.env.NEXT_PUBLIC_DEMO_EMAIL || '');
+               setPassword(process.env.NEXT_PUBLIC_DEMO_PASSWORD || '');
              }}
              style={{
                width: '100%',
@@ -190,7 +190,7 @@ export default function Login() {
                cursor: 'pointer'
              }}
            >
-             ⚡ Auto-Fill Demo User
+             Auto-Fill Demo User
            </button>
         </div>
       </div>
