@@ -12,7 +12,7 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
     }
 
     return jsonNoStore({ success: true }, { status: 200 });
-  } catch (error) {
+  } catch {
     return errorJson(500, "Internal Server Error");
   }
 }

@@ -1,163 +1,218 @@
 .page {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 32px 20px;
   background:
-    radial-gradient(ellipse at top left, rgba(37, 99, 235, 0.18), transparent 40%),
-    radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.14), transparent 36%),
+    radial-gradient(ellipse at top left, rgba(37, 99, 235, 0.16), transparent 42%),
+    radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.12), transparent 38%),
     #0b1120;
   font-family: 'Inter', -apple-system, sans-serif;
 }
 
-.shell {
-  width: min(1080px, 100%);
+.wrapper {
+  width: min(860px, 100%);
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 24px;
-  align-items: stretch;
+  gap: 22px;
 }
 
-.hero,
-.card {
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
-}
-
-.hero {
-  padding: 44px;
-  background: linear-gradient(160deg, #0f172a, #1d4ed8 65%, #38bdf8);
-  color: white;
+.header {
+  text-align: center;
   display: grid;
-  gap: 28px;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-.hero > * {
-  position: relative;
-  z-index: 1;
+  gap: 14px;
 }
 
 .badge {
   width: fit-content;
-  padding: 8px 16px;
+  margin: 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
   border-radius: 100px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #93c5fd;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  backdrop-filter: blur(8px);
 }
 
-.hero h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
-  line-height: 1.05;
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-.hero p {
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.header h1 {
   margin: 0;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  line-height: 1.12;
+  font-weight: 800;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header p {
+  margin: 0 auto;
+  color: #94a3b8;
   font-size: 1rem;
   line-height: 1.7;
-  max-width: 44ch;
+  max-width: 60ch;
+}
+
+.credentials {
+  display: grid;
+  gap: 14px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .credentialGrid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
 .credentialCard {
   padding: 20px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  transition: background 0.2s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .credentialCard:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(59, 130, 246, 0.06);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
-.credentialCard h2 {
-  margin: 0 0 10px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.7;
+.credentialHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  flex-shrink: 0;
+}
+
+.credentialHeader h2 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
 }
 
 .credentialRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
   margin-top: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .credentialRow span {
-  opacity: 0.6;
-  font-size: 0.8rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
 }
 
 .credentialRow code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-weight: 700;
-  font-size: 0.9rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 2px 10px;
-  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 3px 10px;
+  border-radius: 8px;
+  word-break: break-all;
+  text-align: right;
 }
 
 .card {
-  padding: 36px;
-  background: rgba(255, 255, 255, 0.96);
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(18px);
   display: flex;
   flex-direction: column;
 }
 
-.brand {
+.cardBrand {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .brandMark {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
-  border-radius: 16px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: white;
   font-weight: 800;
-  font-size: 1.2rem;
-  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.3);
+  font-size: 1.1rem;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.35);
 }
 
 .brandText {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .brandText span {
-  font-size: 11px;
+  font-size: 10px;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -165,12 +220,12 @@
 }
 
 .brandText strong {
-  font-size: 1.5rem;
-  color: #0f172a;
+  font-size: 1.4rem;
+  color: white;
 }
 
 .notice {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   padding: 14px 18px;
   border-radius: 16px;
   font-size: 0.9rem;
@@ -189,26 +244,26 @@
 }
 
 .info {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .error {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .success {
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: rgba(16, 185, 129, 0.1);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .form {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   flex: 1;
 }
 
@@ -219,7 +274,7 @@
 
 .field label {
   font-size: 0.85rem;
-  color: #334155;
+  color: #cbd5e1;
   font-weight: 700;
 }
 
@@ -227,25 +282,30 @@
   width: 100%;
   padding: 14px 16px;
   border-radius: 14px;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  color: #0f172a;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   box-sizing: border-box;
 }
 
+.field input::placeholder {
+  color: #475569;
+}
+
 .field input:focus {
   border-color: #3b82f6;
-  background: white;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.06);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
 }
 
 .actions {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .primaryButton,
@@ -262,13 +322,18 @@
 .primaryButton {
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: white;
-  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.35);
 }
 
 .secondaryButton {
-  background: white;
-  border: 1.5px solid #e2e8f0;
-  color: #1d4ed8;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: #93c5fd;
+}
+
+.secondaryButton:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .primaryButton:hover:not(:disabled),
@@ -283,12 +348,25 @@
 }
 
 .helperText {
-  margin-top: auto;
-  padding-top: 18px;
+  margin-top: 16px;
+  padding-top: 16px;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #64748b;
   line-height: 1.6;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-
+@media (max-width: 640px) {
+  .credentialGrid {
+    grid-template-columns: 1fr;
+  }
+  .actions {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 22px;
+  }
+  .page {
+    padding: 24px 16px;
+  }
+}
