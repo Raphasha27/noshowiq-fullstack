@@ -19,4 +19,6 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Run tests
-      run: npm test || echo "No 'npm test' script found. Skipping tests."
+      run: npm test
+      continue-on-error: true || echo "No 'npm test' script found. Skipping tests."
+
