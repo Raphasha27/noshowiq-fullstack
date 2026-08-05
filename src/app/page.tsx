@@ -1,133 +1,280 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'NoShowIQ - Stop Healthcare No-Shows',
-  description: 'AI-powered appointment scheduling that predicts and prevents patient no-shows.',
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import styles from './page.module.css';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
 };
 
+const stagger = {
+  animate: { transition: { staggerChildren: 0.1 } },
+};
+
+const stats = [
+  { value: '94.8%', label: 'ML Prediction Accuracy' },
+  { value: 'R35K+', label: 'Monthly Revenue Saved' },
+  { value: '96.2%', label: 'Average Attendance Rate' },
+  { value: '350+', label: 'Private Practices Active' },
+];
+
+const features = [
+  {
+    icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
+    title: 'No-Show Probability Index',
+    desc: 'Pre-evaluates every booking based on past attendance, age, distance, and booking lead-time to output an exact risk profile.',
+  },
+  {
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+    title: 'Smart Conversational Reminders',
+    desc: 'Triggers multi-lingual, personalized WhatsApp/SMS alerts. High-risk patients receive interactive confirm/reschedule prompts.',
+  },
+  {
+    icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+    title: 'Auto-Fill Cancellation Queue',
+    desc: 'When a cancellation is predicted or confirmed, the platform automatically alerts waitlisted patients to claim the slot.',
+  },
+  {
+    icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+    title: 'Revenue Leakage Analytics',
+    desc: 'Instantly quantifies lost time and displays saved billing values in real time so administrators can trace ROI.',
+  },
+  {
+    icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1',
+    title: 'Practice Management Integration',
+    desc: 'Integrates natively into EHR and billing software, syncing calendar updates without changing existing reception flows.',
+  },
+  {
+    icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+    title: 'Multi-Practitioner Scheduling',
+    desc: 'Scales from individual specialist suites to massive private medical centers managing dozens of operating rooms.',
+  },
+];
+
+const painPoints = [
+  {
+    title: 'Unpredicted Absenteeism',
+    bad: 'No-shows cost private suites 15-20% capacity',
+    good: 'AI predicts absences and triggers early rebooking',
+    badIcon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+    goodIcon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+  },
+  {
+    title: 'Unfilled Cancellations',
+    bad: 'Last-minute cancellations go completely wasted',
+    good: 'Waitlist auto-fill recovers slots within 10 minutes',
+    badIcon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
+    goodIcon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+  },
+  {
+    title: 'Manual Confirmation Load',
+    bad: 'Receptionists spend 2.5 hours/day cold-calling',
+    good: 'Conversational triggers automate 92% of outreach',
+    badIcon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+    goodIcon: 'M13 10V3L4 14h7v7l9-11h-7z',
+  },
+];
+
 export default function LandingPage() {
+  useEffect(() => {
+    // Prevent the browser from automatically restoring the scroll position on refresh
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    // Always start at the top
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <main style={{ minHeight: '100vh', background: '#0f172a', color: 'white', overflowX: 'hidden', fontFamily: 'sans-serif' }}>
-      
-      {/* Navigation */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 48px', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 800, fontSize: '1.2rem' }}>
-          <div style={{ width: '32px', height: '32px', background: '#3b82f6', borderRadius: '8px', display: 'grid', placeItems: 'center' }}>IQ</div>
+    <main className={styles.page}>
+      <nav className={styles.nav}>
+        <Link href="/" className={styles.brand} onClick={(e) => {
+          if (window.location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }}>
+          <div className={styles.brandMark}>IQ</div>
           NoShowIQ
-        </div>
-        <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
-          <a href="#features" style={{ color: '#94a3b8', textDecoration: 'none', fontWeight: 500 }}>Features</a>
-          <a href="#demo" style={{ color: '#94a3b8', textDecoration: 'none', fontWeight: 500 }}>Live Demo</a>
-          <Link href="/login" style={{ padding: '10px 24px', background: 'white', color: '#0f172a', fontWeight: 700, borderRadius: '24px', textDecoration: 'none' }}>
-            Login
-          </Link>
+        </Link>
+        <div className={styles.navLinks}>
+          <a href="#features" className={styles.navLink}>Features</a>
+          <a href="#impact" className={styles.navLink}>Revenue Impact</a>
+          <Link href="/login" className={styles.loginBtn}>Enter Portal</Link>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 24px', textAlign: 'center', position: 'relative' }}>
-        
-        {/* Background Glow */}
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }}></div>
+      <section className={styles.heroSection}>
+        <div className={styles.glow} />
+        <motion.div className={styles.heroContent} variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={fadeUp} className={styles.badge}>
+            <span className={styles.badgeDot} />
+            Predictive Intelligence for Private Medical Practices
+          </motion.div>
 
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'inline-block', padding: '6px 16px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '20px', color: '#60a5fa', fontSize: '0.85rem', fontWeight: 600, marginBottom: '24px' }}>
-            ✨ AI-Powered Efficiency for Clinics
-          </div>
-          
-          <h1 style={{ fontSize: '4rem', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px', background: 'linear-gradient(to right, white, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            Stop No-Shows Before <br/> They Happen.
-          </h1>
-          
-          <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '600px', margin: '0 auto 48px', lineHeight: 1.6 }}>
-            NoShowIQ uses advanced machine learning to predict patient attendance, automate reminders, and fill gaps instantly with a smart waitlist.
-          </p>
-          
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
-            <Link href="/login" style={{ padding: '16px 48px', background: '#3b82f6', color: 'white', fontWeight: 700, borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', boxShadow: '0 20px 40px -10px rgba(59,130,246,0.4)', transition: 'transform 0.2s' }}>
-              Get Started Now
+          <motion.h1 variants={fadeUp} className={styles.heroTitle}>
+            Stop Lost Revenue from <br />
+            <span className={styles.heroTitleAccent}>Patient No-Shows &amp; Cancellations</span>
+          </motion.h1>
+
+          <motion.p variants={fadeUp} className={styles.heroDesc}>
+            NoShowIQ uses advanced machine learning models to analyze patient history, weather,
+            and schedule density. We predict appointment attendance, automate reminders, and
+            fill cancellations instantly.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className={styles.heroActions}>
+            <Link href="/login" className={styles.primaryBtn}>
+              Explore Live Trial
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </Link>
-            <a href="#how-it-works" style={{ padding: '16px 48px', background: 'rgba(255,255,255,0.05)', color: 'white', fontWeight: 600, borderRadius: '12px', textDecoration: 'none', fontSize: '1.1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-              How it Works
+            <a href="#features" className={styles.secondaryBtn}>
+              Learn More
             </a>
-          </div>
-        </div>
-
-        {/* Hero Visual */}
-        <div style={{ marginTop: '80px', perspective: '1000px' }}>
-           <div style={{ 
-             maxWidth: '900px', 
-             margin: '0 auto', 
-             background: 'rgba(30, 41, 59, 0.7)', 
-             border: '1px solid rgba(255,255,255,0.1)', 
-             borderRadius: '24px', 
-             padding: '24px', 
-             transform: 'rotateX(10deg) scale(0.95)',
-             boxShadow: '0 50px 100px -20px rgba(0,0,0,0.5)',
-             backdropFilter: 'blur(20px)'
-           }}>
-             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', textAlign: 'left' }}>
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
-                   <div style={{ color: '#60a5fa', fontWeight: 700, marginBottom: '8px' }}>High Risk Detected</div>
-                   <div style={{ fontSize: '2rem', fontWeight: 800 }}>R22,940</div>
-                   <div style={{ color: '#64748b', fontSize: '0.8rem' }}>Potential revenue saved</div>
-                </div>
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
-                   <div style={{ color: '#34d399', fontWeight: 700, marginBottom: '8px' }}>Optimization</div>
-                   <div style={{ fontSize: '2rem', fontWeight: 800 }}>+12%</div>
-                   <div style={{ color: '#64748b', fontSize: '0.8rem' }}>Schedule efficiency</div>
-                </div>
-                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
-                   <div style={{ color: '#f472b6', fontWeight: 700, marginBottom: '8px' }}>Predictions</div>
-                   <div style={{ fontSize: '2rem', fontWeight: 800 }}>94%</div>
-                   <div style={{ color: '#64748b', fontSize: '0.8rem' }}>Accuracy rate</div>
-                </div>
-             </div>
-           </div>
-        </div>
-
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" style={{ background: '#1e293b', padding: '100px 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-             <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '16px' }}>Everything you need to run efficiently.</h2>
-             <p style={{ color: '#94a3b8' }}>Modern tooling for modern clinics.</p>
-          </div>
+      <section id="impact" className={styles.statsSection}>
+        <div className={styles.statsInner}>
+          {stats.map((s, i) => (
+            <motion.div
+              key={i}
+              className={styles.statItem}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+            >
+              <div className={styles.statValue}>{s.value}</div>
+              <div className={styles.statLabel}>{s.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
-             {[
-               { icon: '🔮', title: 'Predictive AI', desc: 'Analyzes patient history and behavioral patterns to score no-show risk in real-time.' },
-               { icon: '⚡', title: 'Smart Waitlist', desc: 'Automatically fills last-minute cancellations with high-priority patients nearby.' },
-               { icon: '📱', title: 'Auto-Reminders', desc: 'Intelligent SMS & WhatsApp reminders sent at the optimal time for response.' },
-               { icon: '📊', title: 'Revenue Analytics', desc: 'Track lost revenue, recovery rates, and clinic performance with beautiful charts.' },
-               { icon: '🔒', title: 'Secure & Private', desc: 'Enterprise-grade security ensuring patient data remains confidential and protected.' },
-               { icon: '🌍', title: 'Cloud Native', desc: 'Access your clinic dashboard from anywhere, on any device, anytime.' },
-             ].map((f, i) => (
-               <div key={i} style={{ padding: '32px', background: '#0f172a', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                 <div style={{ fontSize: '2rem', marginBottom: '24px' }}>{f.icon}</div>
-                 <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '12px' }}>{f.title}</h3>
-                 <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>{f.desc}</p>
-               </div>
-             ))}
+      <section id="features" className={styles.featuresSection}>
+        <div className={styles.featuresInner}>
+          <motion.div
+            className={styles.featuresHeader}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className={styles.featuresTitle}>Designed Specifically for High-Performing Clinics</h2>
+            <p className={styles.featuresSub}>Custom-built workflows that protect practitioner hours and secure practice profitability.</p>
+          </motion.div>
+
+          <div className={styles.featuresGrid}>
+            {features.map((f, i) => (
+              <motion.div
+                key={i}
+                className={styles.featureCard}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+              >
+                <div className={styles.featureIcon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={f.icon} />
+                  </svg>
+                </div>
+                <h3 className={styles.featureTitle}>{f.title}</h3>
+                <p className={styles.featureDesc}>{f.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section style={{ padding: '100px 24px', textAlign: 'center' }}>
-         <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '32px' }}>Ready to optimize your clinic?</h2>
-         <Link href="/login" style={{ padding: '20px 64px', background: 'white', color: '#0f172a', fontWeight: 800, borderRadius: '16px', textDecoration: 'none', fontSize: '1.2rem' }}>
-            Get Started Free
-         </Link>
+      <section className={styles.problemSection}>
+        <div className={styles.problemInner}>
+          <motion.div
+            className={styles.problemHeader}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className={styles.problemTitle}>Stop Letting Idle Slots Drain Your Practice</h2>
+            <p className={styles.problemSub}>
+              Private specialist suites lose an average of R120,000 annually per doctor to empty
+              appointment slots. NoShowIQ acts as an intelligent shield.
+            </p>
+          </motion.div>
+
+          <div className={styles.problemList}>
+            {painPoints.map((p, i) => (
+              <motion.div
+                key={i}
+                className={styles.problemRow}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
+              >
+                <div className={styles.problemTitleBlock}>
+                  <h3>{p.title}</h3>
+                </div>
+                <div className={styles.problemBad}>
+                  <div className={styles.problemIcon}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={p.badIcon} />
+                    </svg>
+                  </div>
+                  <p>{p.bad}</p>
+                </div>
+                <div className={styles.problemGood}>
+                  <div className={styles.problemIcon}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={p.goodIcon} />
+                    </svg>
+                  </div>
+                  <p>{p.good}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
-      
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '48px 24px', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-        © 2026 NoShowIQ. Built by Raphasha27 using Next.js & .NET 8.
+
+      <section className={styles.ctaSection}>
+        <div className={styles.ctaGlow} />
+        <motion.div
+          className={styles.ctaContent}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className={styles.ctaTitle}>Protect Your Clinic&apos;s Bottom Line Today</h2>
+          <p className={styles.ctaDesc}>
+            Set up NoShowIQ in under an hour. Keep your schedules full, your staff happy, and your patients cared for.
+          </p>
+          <Link href="/login" className={styles.ctaBtn}>
+            Explore Live Trial
+          </Link>
+        </motion.div>
+      </section>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerInner}>
+          <div className={styles.footerBrand}>
+            <span className={styles.footerLogo}>NoShowIQ</span>
+            <span className={styles.footerTagline}>The Revenue Protection Engine for Modern Private Clinics</span>
+          </div>
+          <span className={styles.footerCopy}>
+            &copy; 2026 NoShowIQ. Built by Raphasha27 with Next.js, FastAPI &amp; Vercel
+          </span>
+        </div>
       </footer>
-
     </main>
   );
 }

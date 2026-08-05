@@ -4,9 +4,10 @@
   place-items: center;
   padding: 32px 20px;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(79, 70, 229, 0.14), transparent 28%),
-    #f8fafc;
+    radial-gradient(ellipse at top left, rgba(37, 99, 235, 0.18), transparent 40%),
+    radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.14), transparent 36%),
+    #0b1120;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .shell {
@@ -20,40 +21,57 @@
 .hero,
 .card {
   border-radius: 28px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .hero {
-  padding: 40px;
-  background: linear-gradient(160deg, #0f172a, #1d4ed8 62%, #38bdf8);
+  padding: 44px;
+  background: linear-gradient(160deg, #0f172a, #1d4ed8 65%, #38bdf8);
   color: white;
   display: grid;
   gap: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
 }
 
 .badge {
   width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  line-height: 1.02;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  line-height: 1.05;
 }
 
 .hero p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.7;
   max-width: 44ch;
 }
 
@@ -63,17 +81,24 @@
 }
 
 .credentialCard {
-  padding: 18px;
+  padding: 20px;
   border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+
+.credentialCard:hover {
   background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .credentialCard h2 {
   margin: 0 0 10px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
 }
 
 .credentialRow {
@@ -84,22 +109,33 @@
   font-size: 0.95rem;
 }
 
+.credentialRow span {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
 .credentialRow code {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-weight: 700;
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 10px;
+  border-radius: 6px;
 }
 
 .card {
-  padding: 32px;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 36px;
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .brandMark {
@@ -111,7 +147,8 @@
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: white;
   font-weight: 800;
-  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+  font-size: 1.2rem;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.3);
 }
 
 .brandText {
@@ -120,7 +157,7 @@
 }
 
 .brandText span {
-  font-size: 12px;
+  font-size: 11px;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -128,17 +165,27 @@
 }
 
 .brandText strong {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #0f172a;
 }
 
 .notice {
-  margin-bottom: 16px;
-  padding: 14px 16px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
   border-radius: 16px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.noticeIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .info {
@@ -148,13 +195,13 @@
 }
 
 .error {
-  background: #fee2e2;
+  background: #fef2f2;
   color: #b91c1c;
   border: 1px solid #fecaca;
 }
 
 .success {
-  background: #dcfce7;
+  background: #f0fdf4;
   color: #166534;
   border: 1px solid #bbf7d0;
 }
@@ -162,6 +209,7 @@
 .form {
   display: grid;
   gap: 18px;
+  flex: 1;
 }
 
 .field {
@@ -170,7 +218,7 @@
 }
 
 .field label {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: #334155;
   font-weight: 700;
 }
@@ -179,18 +227,19 @@
   width: 100%;
   padding: 14px 16px;
   border-radius: 14px;
-  border: 1px solid #cbd5e1;
+  border: 1.5px solid #e2e8f0;
   background: #f8fafc;
   color: #0f172a;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
 }
 
 .field input:focus {
-  border-color: #2563eb;
+  border-color: #3b82f6;
   background: white;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 .actions {
@@ -204,21 +253,21 @@
   border: none;
   border-radius: 14px;
   padding: 14px 16px;
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
 }
 
 .primaryButton {
   background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: white;
-  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.24);
+  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.3);
 }
 
 .secondaryButton {
   background: white;
-  border: 1px solid #cbd5e1;
+  border: 1.5px solid #e2e8f0;
   color: #1d4ed8;
 }
 
@@ -229,24 +278,17 @@
 
 .primaryButton:disabled,
 .secondaryButton:disabled {
-  opacity: 0.68;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .helperText {
-  margin-top: 18px;
-  font-size: 0.88rem;
-  color: #64748b;
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 0.85rem;
+  color: #94a3b8;
   line-height: 1.6;
+  border-top: 1px solid #e2e8f0;
 }
 
-@media (max-width: 900px) {
-  .shell {
-    grid-template-columns: 1fr;
-  }
 
-  .hero,
-  .card {
-    padding: 28px;
-  }
-}

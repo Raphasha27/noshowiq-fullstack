@@ -1,23 +1,23 @@
 :root {
-  --primary: #ffffff;
-  --primary-foreground: #0f172a;
-  --secondary: #f1f5f9;
+  --primary: #0b1120;
+  --primary-foreground: #ffffff;
+  --secondary: #1e293b;
   --accent: #2563eb;
   --accent-foreground: #ffffff;
-  --background: #f8fafc;
-  --card-bg: rgba(255, 255, 255, 0.9);
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --risk-high: #dc2626;
-  --risk-medium: #d97706;
-  --risk-low: #059669;
-  --glass: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(203, 213, 225, 0.4);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --background: #0b1120;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --risk-high: #f87171;
+  --risk-medium: #fbbf24;
+  --risk-low: #34d399;
+  --glass: rgba(15, 23, 42, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   --radius: 16px;
 }
 
-/* Dark mode removed for high visibility (Black on White) */
+/* Blue interface theme (dark) */
 /* Force hide Next.js dev indicators */
 #__next-build-watcher, 
 #nextjs-dev-indicator,
@@ -78,7 +78,7 @@ body {
 
 .btn-primary:hover {
   filter: brightness(1.1);
-  box-shadow: 0 0 15px var(--accent-glow);
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
 }
 
 .badge {
@@ -89,9 +89,9 @@ body {
   text-transform: uppercase;
 }
 
-.badge-high { background: rgba(239, 68, 68, 0.1); color: var(--risk-high); border: 1px solid rgba(239, 68, 68, 0.2); }
-.badge-medium { background: rgba(245, 158, 11, 0.1); color: var(--risk-medium); border: 1px solid rgba(245, 158, 11, 0.2); }
-.badge-low { background: rgba(16, 185, 129, 0.1); color: var(--risk-low); border: 1px solid rgba(16, 185, 129, 0.2); }
+.badge-high { background: rgba(248, 113, 113, 0.1); color: var(--risk-high); border: 1px solid rgba(248, 113, 113, 0.25); }
+.badge-medium { background: rgba(251, 191, 36, 0.1); color: var(--risk-medium); border: 1px solid rgba(251, 191, 36, 0.25); }
+.badge-low { background: rgba(52, 211, 153, 0.1); color: var(--risk-low); border: 1px solid rgba(52, 211, 153, 0.25); }
 
 /* Animation */
 @keyframes fadeIn {

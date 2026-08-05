@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import {
   DEMO_CREDENTIALS,
@@ -34,11 +35,7 @@ export default function LoginPage() {
       router.replace("/dashboard");
       return;
     }
-
-    if (!isLocked) {
-      return;
-    }
-
+    if (!isLocked) return;
     const intervalId = window.setInterval(() => setClock(Date.now()), 1000);
     return () => window.clearInterval(intervalId);
   }, [isLocked, router]);
@@ -57,26 +54,21 @@ export default function LoginPage() {
     setLoading(true);
 
     if (isLocked) {
-      setMessage({
-        type: "error",
-        text: `Too many failed demo attempts. Try again in ${secondsRemaining} seconds.`,
-      });
+      setMessage({ type: "error", text: `Too many failed attempts. Try again in ${secondsRemaining} seconds.` });
       setLoading(false);
       return;
     }
 
     await new Promise((resolve) => setTimeout(resolve, 500));
-
     const user = validateDemoCredentials(email, password);
+
     if (!user) {
       const nextState = recordFailedLogin();
-
       setMessage({
         type: "error",
-        text:
-          nextState.lockedUntil > 0
-            ? "Demo access is locked for 60 seconds after repeated failures."
-            : `Invalid demo credentials. ${nextState.remainingAttempts} attempt${nextState.remainingAttempts === 1 ? "" : "s"} remaining before lockout.`,
+        text: nextState.lockedUntil > 0
+          ? "Demo access is locked for 60 seconds after repeated failures."
+          : `Invalid demo credentials. ${nextState.remainingAttempts} attempt${nextState.remainingAttempts === 1 ? "" : "s"} remaining before lockout.`,
       });
       setLoading(false);
       return;
@@ -84,18 +76,25 @@ export default function LoginPage() {
 
     clearLoginLockState();
     saveDemoUser(user);
-    setMessage({
-      type: "success",
-      text: `Signed in as ${user.name}. This session is temporary and stored only for the current browser session.`,
-    });
+    setMessage({ type: "success", text: `Signed in as ${user.name}. This session is temporary and stored only for the current browser session.` });
     setLoading(false);
     router.push("/dashboard");
   };
 
   return (
-    <main className={styles.page}>
+    <motion.main
+      className={styles.page}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className={styles.shell}>
-        <section className={styles.hero}>
+        <motion.section
+          className={styles.hero}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
           <span className={styles.badge}>Healthcare Scheduling Demo</span>
           <div>
             <h1>Reduce no-shows without pretending demo auth is production auth.</h1>
@@ -106,9 +105,15 @@ export default function LoginPage() {
           </div>
 
           <div className={styles.credentialGrid}>
-            {DEMO_CREDENTIALS.map((credential) => (
-              <div key={credential.email} className={styles.credentialCard}>
-                <h2>{credential.role === "admin" ? "Admin operator" : "Clinician operator"}</h2>
+            {DEMO_CREDENTIALS.map((credential, i) => (
+              <motion.div
+                key={credential.email}
+                className={styles.credentialCard}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+              >
+                <h2>{credential.role === "admin" ? "Admin Operator" : "Clinician Operator"}</h2>
                 <div className={styles.credentialRow}>
                   <span>Email</span>
                   <code>{credential.email}</code>
@@ -117,12 +122,17 @@ export default function LoginPage() {
                   <span>Password</span>
                   <code>{credential.password}</code>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section className={styles.card}>
+        <motion.section
+          className={styles.card}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
           <div className={styles.brand}>
             <div className={styles.brandMark}>IQ</div>
             <div className={styles.brandText}>
@@ -131,15 +141,16 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div
-            className={`${styles.notice} ${
-              message.type === "error"
-                ? styles.error
-                : message.type === "success"
-                  ? styles.success
-                  : styles.info
-            }`}
-          >
+          <div className={`${styles.notice} ${message.type === "error" ? styles.error : message.type === "success" ? styles.success : styles.info}`}>
+            <svg className={styles.noticeIcon} viewBox="0 0 20 20" fill="currentColor">
+              {message.type === "error" ? (
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              ) : message.type === "success" ? (
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              ) : (
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              )}
+            </svg>
             {message.text}
           </div>
 
@@ -182,8 +193,8 @@ export default function LoginPage() {
             This page does not support password recovery or real user accounts. If you are reviewing
             security, treat every credential shown here as public demo data.
           </p>
-        </section>
+        </motion.section>
       </div>
-    </main>
+    </motion.main>
   );
 }

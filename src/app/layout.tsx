@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NoShowIQ | Predict. Optimize. Care.",
-  description: "Real-time healthcare appointment optimization platform.",
+  title: "NoShowIQ | The Revenue Protection Engine for Modern Private Clinics",
+  description: "Predictive intelligence for private medical practices. Stop lost revenue from patient no-shows & cancellations with ML-powered predictions, automated reminders, and instant slot refills.",
 
   manifest: '/manifest.json',
 };
