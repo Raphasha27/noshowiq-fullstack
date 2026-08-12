@@ -30,7 +30,7 @@
     "eslint-config-next": "16.2.12",
     "postcss": "^8.5.25",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.0"
   },
   "overrides": {
     "picomatch": "4.0.4",
@@ -38,3 +38,4 @@
     "postcss": "^8.5.25"
   }
 }
+
