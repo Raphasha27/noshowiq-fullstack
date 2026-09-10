@@ -1,6 +1,5 @@
-
 import { NextResponse } from 'next/server';
-import { mockDb } from '@/lib/mockDb';
+import { mockDb } from '../../../lib/mockDb';
 
 export async function GET() {
   const patients = await mockDb.patients.getAll();

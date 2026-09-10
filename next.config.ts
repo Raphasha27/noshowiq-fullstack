@@ -1,5 +1,6 @@
-import type { NextConfig } from "next";  const nextConfig: NextConfig = {   // Empty config or add valid config fields here };  
-  output: "export",
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: { unoptimized: true },
 };
 
